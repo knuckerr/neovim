@@ -6,13 +6,13 @@ function M.setup()
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim', opt = true}
 
-    -- Color scheme
-    use 'Mofiqul/dracula.nvim'
+    -- Dracula theme
+    use {'https://github.com/Mofiqul/dracula.nvim'}
 
-    -- Auto Pair
+    -- Auto pair
     use {
-      'windwp/nvim-autopairs',
-       require('nvim-autopairs').setup{}
+      "windwp/nvim-autopairs",
+        config = function() require("nvim-autopairs").setup {} end
     }
 
     -- Fuzzy finder
