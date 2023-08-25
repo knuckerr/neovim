@@ -11,22 +11,16 @@ function M.setup()
   vim.o.updatetime = 250
   vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({focusable=false})]]
 
-local lsp_installer = require("nvim-lsp-installer")
+  local lspconfig = require('lspconfig')
 
--- Register a handler that will be called for all installed servers.
--- Alternatively, you may also register handlers on specific server instances instead (see example below).
-lsp_installer.on_server_ready(function(server)
-    local opts = {}
+  local servers = { 'clangd', 'rust_analyzer', 'jedi_language_server', 'tsserver' }
 
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "tsserver" then
-    --     opts.root_dir = function() ... end
-    -- end
-
-    -- This setup() function is exactly the same as lspconfig's setup function.
-    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    server:setup(opts)
-end)
+  for _, lsp in ipairs(servers) do
+    lspconfig[lsp].setup {
+      -- on_attach = my_custom_on_attach,
+      capabilities = capabilities,
+    }
+  end
 
   -- Set completeopt to have a better completion experience
   vim.o.completeopt = 'menuone,noselect'

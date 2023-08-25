@@ -15,6 +15,7 @@ function M.setup()
   cmd "set nocompatible"
   cmd "set undodir=~/.undo-dir"
   cmd "set undofile"
+  cmd "au BufRead,BufNewFile *.asm set filetype=nasm"
 
   o.shiftwidth = indent
   bo.tabstop = indent
