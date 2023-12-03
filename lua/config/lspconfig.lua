@@ -13,7 +13,7 @@ function M.setup()
 
   local lspconfig = require('lspconfig')
 
-  local servers = { 'clangd', 'rust_analyzer', 'jedi_language_server', 'tsserver' }
+  local servers = { 'clangd', 'rust_analyzer', 'jedi_language_server', 'tsserver', 'csharp_ls' }
 
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
