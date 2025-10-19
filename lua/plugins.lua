@@ -17,7 +17,7 @@ function M.setup()
 
     -- Fuzzy finder
     use {
-      'nvim-telescope/telescope.nvim', tag = '0.1.0',
+      'nvim-telescope/telescope.nvim',
     -- or                            , branch = '0.1.x',
       requires = { {'nvim-lua/plenary.nvim'} }
     }
@@ -60,6 +60,8 @@ function M.setup()
     use {'hrsh7th/cmp-nvim-lsp'} -- LSP source for nvim-cmp
     use {'saadparwaiz1/cmp_luasnip'} -- Snippets source for nvim-cmp
     use {'L3MON4D3/LuaSnip'} -- Snippets plugin
+    use {'nvim-lua/plenary.nvim'}
+    use {'nvim-treesitter/nvim-treesitter'}
 
 
 
