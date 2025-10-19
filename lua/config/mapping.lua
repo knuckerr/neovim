@@ -37,6 +37,16 @@ function M.setup()
   -- Terminal (SPC t)
   keymap("n", "<leader>tt", "<cmd>split | terminal<CR>", { desc = "Open terminal (split)" })
   keymap("n", "<leader>tv", "<cmd>vsplit | terminal<CR>", { desc = "Open terminal (vsplit)" })
+
+
+  -- Chat with CodeCompanion
+  keymap("n", "<leader>ic", "<cmd>CodeCompanionChat<CR>", opts)
+
+  -- Inline code suggestions
+  keymap("n", "<leader>ia", "<cmd>CodeCompanionActions<CR>", opts)
+
+  -- Toggle CodeCompanion window
+  keymap("n", "<leader>im", "<cmd>CodeCompanionCommand<CR>", opts)
 end
 
 return M

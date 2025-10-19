@@ -37,6 +37,42 @@ require("lazy").setup({
       require("hop").setup { keys = "etovxqpdygfblzhckisuran" }
     end
   },
+  
+  --------------------
+  -- AI / Windsurf.nvim
+  --------------------
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      adapters = {
+	chat = function()
+	  return require("codecompanion.adapters").extend("ollama", {
+	    schema = {
+	      model = { default = "gemma3:latest" },
+	    },
+	  })
+	end,
+	inline = function()
+	  return require("codecompanion.adapters").extend("ollama", {
+	    schema = {
+	      model = { default = "gemma3:latest" },
+	    },
+	  })
+	end,
+      },
+      strategies = {
+	chat = { adapter = "chat" },
+	inline = { adapter = "inline" },
+      },
+      opts = {
+	log_level = "DEBUG",
+      },
+    },
+  },
 
   --------------------
   -- FILE EXPLORER  --
