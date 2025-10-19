@@ -106,11 +106,13 @@ require("lazy").setup({
   {
     "junegunn/fzf",
     build = "./install --all",
-    cmd = { "FZF" },
+    lazy = true,  -- optional: lazy-load only when needed
   },
+
   {
     "junegunn/fzf.vim",
-    cmd = { "FZF", "Files", "Buffers" }
+    dependencies = { "junegunn/fzf" },
+    cmd = { "Files", "Buffers", "GFiles", "Rg" }, -- actual Vim commands
   },
 
   --------------------

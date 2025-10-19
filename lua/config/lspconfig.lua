@@ -3,17 +3,24 @@ local M = {}
 function M.setup()
   vim.o.updatetime = 250
 
-  -- Diagnostic configuration
+-- Diagnostic configuration
   vim.diagnostic.config({
-    virtual_text = false,
-    signs = true,
-    underline = true,
+    virtual_text = false, -- no inline text
+    signs = true,         -- show gutter signs
+    underline = true,     -- show underline
     update_in_insert = false,
     float = { focusable = false },
   })
 
   -- Completion settings
   vim.o.completeopt = 'menuone,noselect'
+
+  -- Show diagnostics in a floating window when cursor is on the line
+  vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+      vim.diagnostic.open_float(nil, { focus = false })
+    end,
+  })
 
   -- Capabilities
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
