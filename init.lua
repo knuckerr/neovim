@@ -1,22 +1,13 @@
--- Map leader to space
+-- =========================
+--  init.lua (Lazy version)
+-- =========================
+
+-- Map leader to '.'
 vim.g.mapleader = '.'
 
-local fn = vim.fn
-local execute = vim.api.nvim_command
+-- Core modules
+require('config.settings').setup()
+require('config.mapping').setup()  -- <— must run before plugins
 
--- Auto install packer.nvim if not exists
-local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  execute('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
-end
-vim.cmd [[packadd packer.nvim]]
-vim.cmd 'autocmd BufWritePost plugins.lua PackerCompile' -- Auto compile when there are changes in plugins.lua
-
--- Install plugins
-require('plugins').setup()
-
--- settings
-require('settings').setup()
-
---map
-require('mapping').setup()
+-- Plugin setup via lazy.nvim
+require('config.plugins')      -- Handles plugins
