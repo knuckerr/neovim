@@ -1,34 +1,37 @@
 local M = {}
 
-local cmd = vim.cmd
-local o = vim.o
-local wo = vim.wo
-local bo = vim.bo
-local indent = 2
-local opt = vim.opt
-local g = vim.g
-
 function M.setup()
+  local cmd = vim.cmd
+  local o = vim.o
+  local wo = vim.wo
+  local bo = vim.bo
+  local indent = 2
+
+  -- Basic setup
   cmd "syntax enable"
   cmd "filetype plugin indent on"
   cmd "colorscheme dracula"
-  cmd "set nocompatible"
-  cmd "set undodir=~/.undo-dir"
-  cmd "set undofile"
   cmd "au BufRead,BufNewFile *.asm set filetype=nasm"
 
-  o.shiftwidth = indent
-  bo.tabstop = indent
-  bo.softtabstop = indent
+  -- Persistent undo
+  local undodir = vim.fn.expand("~/.undo-dir")
+  if vim.fn.isdirectory(undodir) == 0 then
+    vim.fn.mkdir(undodir, "p")
+  end
+  o.undodir = undodir
+  o.undofile = true
+
+  -- UI / Editor behavior
   o.termguicolors = true
   o.signcolumn = "yes"
   o.hidden = true
   o.breakindent = true
   o.ignorecase = true
+  o.smartindent = true
   o.scrolloff = 8
   o.splitbelow = true
   o.splitright = true
-  o.clipboard = "unnamed,unnamedplus"
+  o.clipboard = "unnamedplus"
   o.timeoutlen = 300
   o.updatetime = 300
   o.inccommand = "split"
@@ -36,11 +39,21 @@ function M.setup()
   o.sidescrolloff = 8
   o.sessionoptions = "blank,buffers,curdir,folds,help,options,tabpages,winsize,resize,winpos,terminal"
   o.history = 1000
-  o.lazyredraw = true
   o.synmaxcol = 240
+
+  -- Search
+  o.incsearch = true
+  o.hlsearch = true
+
+  -- Numbers
   wo.number = true
   wo.relativenumber = false
-  wo.scrolloff = 8
   wo.cursorline = true
+
+  -- Tabs
+  o.shiftwidth = indent
+  bo.tabstop = indent
+  bo.softtabstop = indent
 end
+
 return M

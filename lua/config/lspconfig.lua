@@ -1,39 +1,52 @@
--- LSP settings
-local M  = {}
+local M = {}
+
 function M.setup()
-  local lsp = vim.lsp
-  lsp.handlers['textDocument/publishDiagnostics'] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = false,
-      signs = true,
-      underline = true,
-      update_in_insert = false,
-  })
   vim.o.updatetime = 250
-  vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({focusable=false})]]
 
-  local lspconfig = require('lspconfig')
+  -- Diagnostic configuration
+  vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    float = { focusable = false },
+  })
 
-  local servers = { 'clangd', 'rust_analyzer', 'pyright', 'csharp_ls' }
-
-  for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-      -- on_attach = my_custom_on_attach,
-      capabilities = capabilities,
-    }
-  end
-
-  -- Set completeopt to have a better completion experience
+  -- Completion settings
   vim.o.completeopt = 'menuone,noselect'
 
-  -- luasnip setup
-  local luasnip = require 'luasnip'
+  -- Capabilities
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+  -- on_attach for LSP keymaps
+  local on_attach = function(_, bufnr)
+    local bufmap = function(mode, lhs, rhs)
+      vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true })
+    end
+    bufmap('n', 'gd', vim.lsp.buf.definition)
+    bufmap('n', 'K', vim.lsp.buf.hover)
+    bufmap('n', 'gi', vim.lsp.buf.implementation)
+    bufmap('n', '<leader>rn', vim.lsp.buf.rename)
+    bufmap('n', '<leader>ca', vim.lsp.buf.code_action)
+  end
+
+  -- Modern LSP config API (Neovim 0.11+)
+  local servers = { 'clangd', 'rust_analyzer', 'pyright', 'csharp_ls' }
+  for _, server in ipairs(servers) do
+    vim.lsp.config(server, {
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+    vim.lsp.enable(server)
+  end
 
   -- nvim-cmp setup
+  local luasnip = require 'luasnip'
   local cmp = require 'cmp'
   cmp.setup {
     snippet = {
       expand = function(args)
-        require('luasnip').lsp_expand(args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
     mapping = {
@@ -43,10 +56,7 @@ function M.setup()
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      },
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
       ['<Tab>'] = function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -72,4 +82,5 @@ function M.setup()
     },
   }
 end
+
 return M
